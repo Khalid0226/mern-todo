@@ -1,8 +1,13 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import userModel from './mongoDB.js'
+import cors from 'cors'
 
 const app = express()
+
+app.use(cors())
+
+
 
 // middleware
 app.use(express.urlencoded({extended:true}))
