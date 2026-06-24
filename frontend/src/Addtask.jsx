@@ -1,11 +1,14 @@
 import React from 'react'
 import { useState } from 'react'
 import axios from 'axios'
+import {useNavigate} from 'react-router-dom'
 
 function Addtask() {
 
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
+
+    const navigate = useNavigate()
 
     const postData = async (e) =>{
         e.preventDefault()
@@ -18,6 +21,9 @@ function Addtask() {
 
         setTitle('')
         setDescription('')
+
+        alert('task added successfully!!!')
+        navigate('/tasks')
         
         } catch (error) {
             console.log(error);
