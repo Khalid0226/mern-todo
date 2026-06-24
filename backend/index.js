@@ -63,4 +63,20 @@ app.get('/tasks', async (req, res) => {
     }
 })
 
+app.delete('/delete/:id', async (req, res) => {
+    try {
+        await userModel.findByIdAndDelete(req.params.id);
+
+        res.status(200).json({
+            message: 'deleted successfully'
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: 'delete failed',
+            error: error.message
+        });
+    }
+});
+
 app.listen(2100)
