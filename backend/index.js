@@ -10,7 +10,7 @@ app.use(cors())
 
 
 // middleware
-app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({ extended: true }))
 
 // for thunderClient bcause db sends json data
 app.use(express.json())
@@ -18,31 +18,46 @@ app.use(express.json())
 
 // db connection
 mongoose.connect('mongodb://localhost:27017/to-do')
-.then(()=>{
-    console.log('DB CONNECTED!!');
-})
-.catch((err)=>{
-    console.log(err);
-    
-})
+    .then(() => {
+        console.log('DB CONNECTED!!');
+    })
+    .catch((err) => {
+        console.log(err);
+
+    })
 
 
-app.get('/',(req,res)=>{
+app.get('/', (req, res) => {
     res.send('hello khalid')
 })
 
 
-app.post('/add-task',async (req,res)=>{
+app.post('/add-task', async (req, res) => {
     try {
         const data = await userModel.create(req.body)
 
-        res.status(201).send({
-            message:'success',
-            task:data
+        res.status(201).json({
+            message: 'success',
+            task: data
         })
     } catch (error) {
-        res.status(500).send({
-            message:'failed',
+        res.status(500).json({
+            message: 'failed',
+            error: error.message
+        })
+    }
+})
+
+app.get('/tasks', async (req, res) => {
+    try {
+        const result = await userModel.find()
+        res.status(200).json({
+            message: 'success',
+            result: result
+        })
+    } catch(error){
+        res.status(500).json({
+            message:'failded',
             error:error.message
         })
     }

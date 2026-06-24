@@ -8,6 +8,7 @@ function NavBar() {
             <div className='text-2xl font-bold text-indigo-600'>To-Do App</div>
             <ul className='flex gap-6 text-gray-700 font-medium'>
                 <li><Link to='/' className="hover:text-indigo-600 transition">Home</Link></li>
+                <li><Link to='/tasks' className="hover:text-indigo-600 transition" >Task List</Link></li>
                 <li><Link to='/add-task' className="hover:text-indigo-600 transition">Add Task</Link></li>
             </ul>
         </nav>
