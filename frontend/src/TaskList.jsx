@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import { useState } from 'react'
 import { useEffect } from 'react'
+import {Link} from 'react-router-dom'
 
 function TaskList() {
     const [data, setData] = useState([])
@@ -60,8 +61,10 @@ function TaskList() {
                                 onClick={() => deleteData(item._id)}
                                 className="bg-red-500 px-3 py-1 text-white rounded hover:bg-red-700"
                             >
-                                delete
+                                delete task
                             </button>
+
+                            <Link  className="bg-blue-500 px-3 py-1 text-white rounded hover:bg-blue-700 ml-10" to={`/update/${item._id}`} >Update task</Link>
                         </div>
                     </div>
                 ))}

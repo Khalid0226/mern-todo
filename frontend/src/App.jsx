@@ -5,6 +5,7 @@ import { Routes,Route } from 'react-router-dom'
 import Home from './Home'
 import Addtask from './Addtask'
 import TaskList from './TaskList'
+import Updatetask from './Updatetask'
 
 
 function App() {
@@ -18,6 +19,8 @@ function App() {
       <Route path='/' element={<Home />}></Route>
       <Route path='/tasks' element={<TaskList />}></Route>
       <Route path='/add-task' element={<Addtask />}></Route>
+
+      <Route path='/update/:id' element={<Updatetask />}></Route>
     </Routes>
     </>
 

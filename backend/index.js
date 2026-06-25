@@ -79,4 +79,37 @@ app.delete('/delete/:id', async (req, res) => {
     }
 });
 
+
+app.get('/task/:id', async (req,res)=>{
+    try {
+        const result = await userModel.findById(req.params.id)
+        res.status(200).json({
+            message:'done',
+            result:result
+        })
+        
+    } catch (error) {
+        res.status(500).json({
+            message:'failed',
+            error:error.message
+        })
+    }
+})
+
+app.put('/task/:id',async (req,res)=>{
+    try {
+        const result = await userModel.findByIdAndUpdate(req.params.id,req.body,{new:true})
+
+        res.status(201).json({
+            message:"done",
+            result:result
+        })
+    } catch (error) {
+        res.status(500).json({
+            message:'failed',
+            result:error.message
+        })
+    }
+})
+
 app.listen(2100)
