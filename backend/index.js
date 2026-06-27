@@ -55,10 +55,10 @@ app.get('/tasks', async (req, res) => {
             message: 'success',
             result: result
         })
-    } catch(error){
+    } catch (error) {
         res.status(500).json({
-            message:'failded',
-            error:error.message
+            message: 'failded',
+            error: error.message
         })
     }
 })
@@ -79,15 +79,15 @@ app.delete('/delete/:id', async (req, res) => {
     }
 });
 
-
-app.get('/task/:id', async (req,res)=>{
+app.delete('/delete-multiple', async (req,res) => {
     try {
-        const result = await userModel.findById(req.params.id)
+        const {ids} = req.body
+        const result = await userModel.deleteMany({_id : {$in:ids}})
+
         res.status(200).json({
-            message:'done',
+            message:'success',
             result:result
         })
-        
     } catch (error) {
         res.status(500).json({
             message:'failed',
@@ -96,20 +96,39 @@ app.get('/task/:id', async (req,res)=>{
     }
 })
 
-app.put('/task/:id',async (req,res)=>{
-    try {
-        const result = await userModel.findByIdAndUpdate(req.params.id,req.body,{new:true})
 
-        res.status(201).json({
-            message:"done",
-            result:result
+app.get('/task/:id', async (req, res) => {
+    try {
+        const result = await userModel.findById(req.params.id)
+        res.status(200).json({
+            message: 'done',
+            result: result
         })
+
     } catch (error) {
         res.status(500).json({
-            message:'failed',
-            result:error.message
+            message: 'failed',
+            error: error.message
         })
     }
 })
+
+app.put('/task/:id', async (req, res) => {
+    try {
+        const result = await userModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
+
+        res.status(201).json({
+            message: "done",
+            result: result
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: 'failed',
+            result: error.message
+        })
+    }
+})
+
+
 
 app.listen(2100)

@@ -6,6 +6,7 @@ import {Link} from 'react-router-dom'
 
 function TaskList() {
     const [data, setData] = useState([])
+    const [select,setSelect] = useState([])
 
     const fetchData = async () => {
         try {
@@ -33,12 +34,50 @@ function TaskList() {
         }
     }
 
+    const selectAll = (event) =>{
+
+        if (event.target.checked) {
+            let items = data.map((item) => item._id)
+            setSelect(items);
+            
+        }
+        else{
+            setSelect([])
+        }
+    }
+
+    const selectOne = (id) =>{
+        if (select.includes(id)) {
+            setSelect(select.filter(item => item !== id))
+        }
+        else{
+            setSelect([id,...select])
+        }
+    }
+
+
+    const deleteMany = async () =>{
+        try {
+            const response  = await axios.delete('http://localhost:2100/delete-multiple',{
+                data :{
+                    ids:select
+                }
+            })
+            alert('task deleted successfully!!')
+            setSelect([])
+            await fetchData()
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <div className="p-6 bg-gray-100 min-h-screen">
 
             {/* Header */}
-            <div className="grid grid-cols-4 text-center font-bold bg-gray-200 p-3 rounded">
+            <button onClick={deleteMany} className="bg-red-500 px-3 py-1 text-white rounded hover:bg-red-700">delete Many</button>
+            <div className="grid grid-cols-5 text-center font-bold bg-gray-200 p-3 rounded">
+                <div> <input type="checkbox" name="" id="" onChange={selectAll} /></div>
                 <div>Number</div>
                 <div>Title</div>
                 <div>Description</div>
@@ -50,8 +89,9 @@ function TaskList() {
                 {data.map((item,index) => (
                     <div
                         key={item._id}
-                        className="grid grid-cols-4 items-center text-center bg-white p-3 rounded shadow"
-                    >
+                        className="grid grid-cols-5 items-center text-center bg-white p-3 rounded shadow"
+                    >   
+                        <div> <input type="checkbox" checked={select.includes(item._id)} onChange={()=>selectOne(item._id)} /> </div>
                         <div>{index + 1}</div>
                         <div>{item.title}</div>
                         <div>{item.description}</div>
