@@ -5,6 +5,6 @@ const userSchema = new mongoose.Schema({
     description:String
 })
 
-const userModel = mongoose.model('User',userSchema)
+const taskModel = mongoose.model('Task',userSchema)
 
-export default userModel
+export default taskModel

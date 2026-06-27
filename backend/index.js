@@ -1,6 +1,12 @@
 import express from 'express'
 import mongoose from 'mongoose'
-import userModel from './mongoDB.js'
+// import userModel from './mongoDB.js'
+import taskModel from './models/taskModel.js'
+import userModel from './models/userModel.js'
+
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+
 import cors from 'cors'
 
 const app = express()
@@ -34,7 +40,7 @@ app.get('/', (req, res) => {
 
 app.post('/add-task', async (req, res) => {
     try {
-        const data = await userModel.create(req.body)
+        const data = await taskModel.create(req.body)
 
         res.status(201).json({
             message: 'success',
@@ -48,9 +54,47 @@ app.post('/add-task', async (req, res) => {
     }
 })
 
+app.post('/signup', async (req,res)=>{
+    try {
+        const {name,email,password} = req.body
+
+        if (!name || !email || !password) {
+            return res.status(400).json({message:'email and password is required'})
+        }
+
+        const hashedPassword = await bcrypt.hash(password,10)
+        const data = await userModel.create({
+            name,email,password:hashedPassword
+        })
+
+        // 🔥 JWT TOKEN GENERATE
+        
+        const token = jwt.sign(
+            {
+                id:data._id,
+                email:data.email
+            },
+            'secretkey',
+            {expiresIn:'1d'}
+        )
+        // console.log(token);
+
+        res.status(201).json({
+            message:'success',
+            result:data,
+            token:token
+        })
+    } catch (error) {
+     res.status(500).json({
+        message:'failed',
+        error:error.message
+     })   
+    }
+})
+
 app.get('/tasks', async (req, res) => {
     try {
-        const result = await userModel.find()
+        const result = await taskModel.find()
         res.status(200).json({
             message: 'success',
             result: result
@@ -65,7 +109,7 @@ app.get('/tasks', async (req, res) => {
 
 app.delete('/delete/:id', async (req, res) => {
     try {
-        await userModel.findByIdAndDelete(req.params.id);
+        await taskModel.findByIdAndDelete(req.params.id);
 
         res.status(200).json({
             message: 'deleted successfully'
@@ -82,7 +126,7 @@ app.delete('/delete/:id', async (req, res) => {
 app.delete('/delete-multiple', async (req,res) => {
     try {
         const {ids} = req.body
-        const result = await userModel.deleteMany({_id : {$in:ids}})
+        const result = await taskModel.deleteMany({_id : {$in:ids}})
 
         res.status(200).json({
             message:'success',
@@ -99,7 +143,7 @@ app.delete('/delete-multiple', async (req,res) => {
 
 app.get('/task/:id', async (req, res) => {
     try {
-        const result = await userModel.findById(req.params.id)
+        const result = await taskModel.findById(req.params.id)
         res.status(200).json({
             message: 'done',
             result: result
@@ -115,7 +159,7 @@ app.get('/task/:id', async (req, res) => {
 
 app.put('/task/:id', async (req, res) => {
     try {
-        const result = await userModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        const result = await taskModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
 
         res.status(201).json({
             message: "done",

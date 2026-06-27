@@ -6,6 +6,8 @@ import Home from './Home'
 import Addtask from './Addtask'
 import TaskList from './TaskList'
 import Updatetask from './Updatetask'
+import SignUp from './auth/SignUp'
+import Login from './auth/Login'
 
 
 function App() {
@@ -21,6 +23,9 @@ function App() {
       <Route path='/add-task' element={<Addtask />}></Route>
 
       <Route path='/update/:id' element={<Updatetask />}></Route>
+
+      <Route path='/signup' element={<SignUp />}></Route>
+      <Route path='/login' element={<Login />}></Route>
     </Routes>
     </>
 

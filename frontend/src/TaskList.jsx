@@ -77,7 +77,7 @@ function TaskList() {
             {/* Header */}
             <button onClick={deleteMany} className="bg-red-500 px-3 py-1 text-white rounded hover:bg-red-700">delete Many</button>
             <div className="grid grid-cols-5 text-center font-bold bg-gray-200 p-3 rounded">
-                <div> <input type="checkbox" name="" id="" onChange={selectAll} /></div>
+                <div> <input type="checkbox" onChange={selectAll} checked={select.length === data.length && data.length > 0} /></div>
                 <div>Number</div>
                 <div>Title</div>
                 <div>Description</div>
