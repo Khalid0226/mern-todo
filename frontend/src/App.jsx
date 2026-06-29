@@ -9,22 +9,29 @@ import Updatetask from './Updatetask'
 import SignUp from './auth/SignUp'
 import Login from './auth/Login'
 
+import ProtectedRoute from './ProtectedRoute'
+
+import { useLocation } from 'react-router-dom'
+
 
 function App() {
 
+  const location = useLocation()
+
+  const hideNav = location.pathname ==='/login' || location.pathname ==='/'
   return (
     <>
-    <NavBar />
+   {!hideNav &&  <NavBar />}
 
     {/* <h1>Hello world!!!</h1> */}
     <Routes>
-      <Route path='/' element={<Home />}></Route>
-      <Route path='/tasks' element={<TaskList />}></Route>
-      <Route path='/add-task' element={<Addtask />}></Route>
+      <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>}></Route>
+      <Route path='/tasks' element={<ProtectedRoute><TaskList /></ProtectedRoute>}></Route>
+      <Route path='/add-task' element={<ProtectedRoute><Addtask /></ProtectedRoute>}></Route>
 
-      <Route path='/update/:id' element={<Updatetask />}></Route>
+      <Route path='/update/:id' element={<ProtectedRoute><Updatetask /></ProtectedRoute>}></Route>
 
-      <Route path='/signup' element={<SignUp />}></Route>
+      <Route path='/' element={<SignUp />}></Route>
       <Route path='/login' element={<Login />}></Route>
     </Routes>
     </>

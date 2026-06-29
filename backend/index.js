@@ -9,6 +9,8 @@ import jwt from 'jsonwebtoken'
 
 import cors from 'cors'
 
+import verifyToken from './middleware/auth.js'
+
 const app = express()
 
 app.use(cors())
@@ -147,7 +149,7 @@ app.post('/login', async (req, res) => {
     }
 })
 
-app.get('/tasks', async (req, res) => {
+app.get('/tasks', verifyToken, async (req, res) => {
     try {
         const result = await taskModel.find()
         res.status(200).json({

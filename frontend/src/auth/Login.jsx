@@ -22,7 +22,7 @@ function Login() {
             localStorage.setItem('token',response.data.token)
 
             alert(`login successfull ${email}`)
-            navigate('/')
+            navigate('/home')
         } catch (error) {
             console.log(error);
         }
@@ -51,7 +51,7 @@ function Login() {
                         <div className="text-center mt-4">
                             <p className="text-sm">
                                 can't have an account?{" "}
-                                <Link to="/signup" className="text-blue-500 hover:underline">
+                                <Link to="/" className="text-blue-500 hover:underline">
                                     Signup
                                 </Link>
                             </p>

@@ -10,7 +10,11 @@ function TaskList() {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get('http://localhost:2100/tasks')
+            const response = await axios.get('http://localhost:2100/tasks',{
+                headers:{
+                    Authorization:`bearer ${localStorage.getItem('token')}`
+                }
+            })
             console.log(response.data.result);
 
             setData(response.data.result)
