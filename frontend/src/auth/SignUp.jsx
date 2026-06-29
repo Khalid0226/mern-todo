@@ -23,6 +23,9 @@ function SignUp() {
 
             console.log(response.data);
 
+            localStorage.setItem('token',response.data.token)
+            console.log(localStorage.getItem("token"));
+
             setName('')
             setEmail('')
             setPassword('')

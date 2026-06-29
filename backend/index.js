@@ -54,41 +54,96 @@ app.post('/add-task', async (req, res) => {
     }
 })
 
-app.post('/signup', async (req,res)=>{
+app.post('/signup', async (req, res) => {
     try {
-        const {name,email,password} = req.body
+        const { name, email, password } = req.body
 
         if (!name || !email || !password) {
-            return res.status(400).json({message:'email and password is required'})
+            return res.status(400).json({ message: 'email and password is required' })
         }
 
-        const hashedPassword = await bcrypt.hash(password,10)
+        const hashedPassword = await bcrypt.hash(password, 10)
         const data = await userModel.create({
-            name,email,password:hashedPassword
+            name,
+            email,
+            password: hashedPassword
         })
 
         // 🔥 JWT TOKEN GENERATE
-        
+
         const token = jwt.sign(
             {
-                id:data._id,
-                email:data.email
+                id: data._id,
+                email: data.email
             },
             'secretkey',
-            {expiresIn:'1d'}
+            { expiresIn: '1d' }
         )
         // console.log(token);
 
         res.status(201).json({
-            message:'success',
-            result:data,
-            token:token
+            message: 'success',
+            result: data,
+            token: token
         })
     } catch (error) {
-     res.status(500).json({
-        message:'failed',
-        error:error.message
-     })   
+        res.status(500).json({
+            message: 'failed',
+            error: error.message
+        })
+    }
+})
+
+app.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body
+
+        if (!email || !password) {
+            return res.status(400).json({
+                message: 'email and password is required!!'
+            })
+        }
+
+        const user = await userModel.findOne({ email })
+
+        if (!user) {
+            return res.status(401).json({
+                message: 'invalid email'
+            })
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password)
+
+        if (!isMatch) {
+            return res.status(401).json({
+                message: 'invalid password'
+            })
+        }
+
+        const token = jwt.sign(
+            {
+                id: user._id,
+                email: user.email
+            },
+            'secretkey',
+            { expiresIn: '1d' }
+
+        )
+
+        res.status(200).json({
+            message: 'done!!',
+            result: {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            },
+            token: token
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: 'failed',
+            error: error.message
+        })
     }
 })
 
@@ -123,19 +178,19 @@ app.delete('/delete/:id', async (req, res) => {
     }
 });
 
-app.delete('/delete-multiple', async (req,res) => {
+app.delete('/delete-multiple', async (req, res) => {
     try {
-        const {ids} = req.body
-        const result = await taskModel.deleteMany({_id : {$in:ids}})
+        const { ids } = req.body
+        const result = await taskModel.deleteMany({ _id: { $in: ids } })
 
         res.status(200).json({
-            message:'success',
-            result:result
+            message: 'success',
+            result: result
         })
     } catch (error) {
         res.status(500).json({
-            message:'failed',
-            error:error.message
+            message: 'failed',
+            error: error.message
         })
     }
 })

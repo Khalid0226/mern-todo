@@ -1,17 +1,39 @@
+import axios from 'axios'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 function Login() {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const navigate = useNavigate()
+
+    const handleLogin = async(e) =>{
+        e.preventDefault()
+        try {
+            const response = await axios.post('http://localhost:2100/login',{
+                email:email,
+                password:password
+            })
+
+            console.log(response.data);
+
+            localStorage.setItem('token',response.data.token)
+
+            alert(`login successfull ${email}`)
+            navigate('/')
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <div className="flex justify-center items-center h-screen bg-gray-100">
             <div className="bg-white p-8 rounded-lg shadow-md w-96">
                 <h1 className="text-2xl font-bold text-center mb-6">Login Page</h1>
 
                 <div className="space-y-4">
-                    <form action="">
+                    <form onSubmit={handleLogin}>
                         <div>
                             <label htmlFor="">Email</label>
                             <input type="email" placeholder='enter email' name='email' onChange={(e) => setEmail(e.target.value)}
