@@ -18,7 +18,7 @@ function App() {
 
   const location = useLocation()
 
-  const hideNav = location.pathname ==='/login' || location.pathname ==='/'
+  const hideNav = location.pathname ==='/'|| location.pathname ==='/login' 
   return (
     <>
    {!hideNav &&  <NavBar />}
