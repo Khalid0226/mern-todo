@@ -9,6 +9,8 @@ import Updatetask from './Updatetask'
 import SignUp from './auth/SignUp'
 import Login from './auth/Login'
 
+import NotFound from './NotFound'
+
 import ProtectedRoute from './ProtectedRoute'
 
 import { useLocation } from 'react-router-dom'
@@ -18,10 +20,10 @@ function App() {
 
   const location = useLocation()
 
-  const hideNav = location.pathname ==='/'|| location.pathname ==='/login' 
+  const showNav = location.pathname === '/home' || location.pathname === '/tasks' || location.pathname === '/add-task' || location.pathname.startsWith('/update/')
   return (
     <>
-   {!hideNav &&  <NavBar />}
+   {showNav &&  <NavBar />}
 
     {/* <h1>Hello world!!!</h1> */}
     <Routes>
@@ -33,6 +35,7 @@ function App() {
 
       <Route path='/' element={<SignUp />}></Route>
       <Route path='/login' element={<Login />}></Route>
+      <Route path='*' element={<NotFound />}></Route>
     </Routes>
     </>
 
